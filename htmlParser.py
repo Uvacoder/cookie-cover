@@ -2,6 +2,7 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import re
+import json
 
 DEBUG = True
 
@@ -25,6 +26,10 @@ def parseAddress(driver):
         td = re.sub("'", "", td)
         log(td.encode("utf-8"))
 
+#Load up configs
+with open('config.json') as configs:
+    jsonConfigs = json.load(configs)
+    log(jsonConfigs)
 #Start up Chrome and get user to navigate to page
 print("Starting Chrome Window...")
 print("Please navigate to the job page.")
@@ -33,8 +38,8 @@ driver.get("https://www.recruitguelph.ca/students/student-login.htm")
 #Log into SSO
 username = driver.find_element_by_id("inputUsername")
 password = driver.find_element_by_id("inputPassword")
-username.send_keys("Fill in username")
-password.send_keys("Fill in password")
+username.send_keys(jsonConfigs["username"])
+password.send_keys(jsonConfigs["password"])
 driver.find_element_by_class_name("btn").click()
 #Navigate to job pages
 driver.find_element_by_link_text("Co-op").click()
