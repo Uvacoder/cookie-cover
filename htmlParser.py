@@ -9,7 +9,7 @@ from docx.shared import Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
 
-DEBUG = True
+DEBUG = False
 
 #Log printing
 def log(d):
@@ -26,6 +26,12 @@ def parse(driver):
     html = html.replace("–", "-")
     html = html.replace("’", "'")
     html = html.replace("‘", "'")
+    html = html.replace("—", "-")
+    html = html.replace("●", "")
+    html = html.replace("“", "\"")
+    html = html.replace("”", "\"")
+    html = html.replace("​", " ")
+
     log(html)
     bs = BeautifulSoup(html, "html.parser")
     #Find all tables
@@ -42,6 +48,10 @@ def parse(driver):
     return tdList
 
 def documentWrite(tdList):
+    #Fix list length if website is not included in application
+    if(len(tdList) != 14 ):
+        log("Fixing list")
+        tdList.insert(7, "Website")
     #Open document
     coverLetter = Document('test.docx')
     #Create cover letter header
@@ -65,11 +75,11 @@ def documentWrite(tdList):
     #Write greeting
     greeting = coverLetter.add_paragraph("Dear " + tdList[3].get_text() + " " + tdList[5].get_text() + ",")
     #Write self introduction and interest
-    body1 = coverLetter.add_paragraph("My name is Bradley Leonard and I am a 3nd year Engineering Systems and Computing student at the University of Guelph. ")
+    body1 = coverLetter.add_paragraph("My name is Bradley Leonard and I am a 3rd year Engineering Systems and Computing student at the University of Guelph. With my passion for both programming and robotics I am aiming for the Mechatronics stream of my program. ")
     body1.paragraph_format.first_line_indent = Inches(0.25)
     body1.add_run("I am currently looking for a 4 month co-op position in the winter of 2018. Your posted position on Recruit Guelph for " + tdList[13] + " has acquired my attention as I possess a fascination with coding in a multitude of languages and a love for seeing my creations come to life right before my eyes.")
     #Write tech introduction
-    body2 = coverLetter.add_paragraph("I am hardworking individual with a passion for technology and am quick to pick up additional skills either though self-teaching or being taught by others.  This can be shown through my co-development of the app “Plannit” or my co-founding of FreebieMapp. I look to do the best job I can in the most efficient manner possible. In addition, I have acquired a large set of skills presently and am always willing to expand this list.")
+    body2 = coverLetter.add_paragraph("I am a hardworking individual with a passion for technology and am quick to pick up additional skills either through self-teaching or being taught by others. This can be shown through my co-development of the app “Plannit” or my co-founding of FreebieMapp. They are two broad projects that exhibit my craving for a challenge and yearning to learn. I look to do the best job I can in the most efficient manner possible. In addition, I have acquired a large set of skills presently and am always willing to expand this list.")
     body2.paragraph_format.first_line_indent = Inches(0.25)
     #Write personal skills
     body3 = coverLetter.add_paragraph("I am also a friendly, patient and determined individual. These interpersonal skills come from my vast experience with playing and coaching sports along with many other types of social events. However when the task requires it, I can also work autonomously.")
@@ -80,7 +90,7 @@ def documentWrite(tdList):
     #Write closing
     closing = coverLetter.add_paragraph("Respectfully yours,\nBradley Leonard")
     #Save document
-    coverLetter.save("Bradley Leonard Cover Letter " + tdList[0].get_text() + " " + tdList[13] + " " + ".docx")
+    coverLetter.save("Bradley Leonard Cover Letter " + tdList[0].get_text() + " " + tdList[13] + ".docx")
 
 #Load up configs
 with open('config.json') as configs:
