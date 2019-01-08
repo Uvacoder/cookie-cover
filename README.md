@@ -34,9 +34,9 @@ Run the program using the following command
 python htmlParser.py
 ```
 
-Wait for the program to bring up the website and log in
-Navigate to the job posting of your choosing
-When you have selected the desired job posting, enter "y" in the command line to generate a cover letter
+Wait for the program to bring up the website and log in  
+Navigate to the job posting of your choosing  
+When you have selected the desired job posting, enter "y" in the command line to generate a cover letter  
 
 ```
 Are you ready?
